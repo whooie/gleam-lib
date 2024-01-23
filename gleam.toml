@@ -1,0 +1,6 @@
+name = "whooie"
+version = "0.1.0"
+licenses = []
+
+[dependencies]
+gleam_stdlib = "0.34.0"
