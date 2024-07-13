@@ -200,11 +200,11 @@ pub fn atan2(y: Float, x: Float) -> Float {
       _ -> y /. x
     }
   let z = atan(yx)
-  case #(cmp(y, 0.0), cmp(x, 0.0)) {
-    #(Gt, Lt) -> z +. pi
-    #(Lt, Lt) -> z -. pi
-    #(Eq, Lt) -> z +. pi
-    _ -> z
+  case cmp(y, 0.0), cmp(x, 0.0) {
+    Gt, Lt -> z +. pi
+    Lt, Lt -> z -. pi
+    Eq, Lt -> z +. pi
+    _, _ -> z
   }
 }
 
@@ -266,9 +266,9 @@ pub fn ln(x: Float) -> Float {
 
 /// Logarithm to arbitrary base. Requires positive base and argument.
 pub fn log(x: Float, base: Float) -> Float {
-  case #(cmp(x, 0.0), cmp(base, 0.0)) {
-    #(Gt, Gt) -> ln(x) /. ln(base)
-    _ -> panic as "invalid argument in log"
+  case cmp(x, 0.0), cmp(base, 0.0) {
+    Gt, Gt -> ln(x) /. ln(base)
+    _, _ -> panic as "invalid argument in log"
   }
 }
 

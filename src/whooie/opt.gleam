@@ -61,19 +61,19 @@ pub fn or_else(opt: Option(a), f: fn() -> Option(a)) -> Option(a) {
 /// If only one of both arguments is `Some`, return that value, otherwise
 /// `None`.
 pub fn xor(opt_a: Option(a), opt_b: Option(a)) -> Option(a) {
-  case #(opt_a, opt_b) {
-    #(Some(a), None) -> Some(a)
-    #(None, Some(b)) -> Some(b)
-    _ -> None
+  case opt_a, opt_b {
+    Some(a), None -> Some(a)
+    None, Some(b) -> Some(b)
+    _, _ -> None
   }
 }
 
 /// If both arguments are `Some`, return a `Some` of both wrapped values,
 /// otherwise `None`.
 pub fn zip(opt_a: Option(a), opt_b: Option(b)) -> Option(#(a, b)) {
-  case #(opt_a, opt_b) {
-    #(Some(a), Some(b)) -> Some(#(a, b))
-    _ -> None
+  case opt_a, opt_b {
+    Some(a), Some(b) -> Some(#(a, b))
+    _, _ -> None
   }
 }
 

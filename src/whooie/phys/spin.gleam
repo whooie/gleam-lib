@@ -185,9 +185,9 @@ pub fn projections_rev(tot: SpinTotal) -> Iterator(Spin) {
 /// Compare the projection numbers of two states if they have the same total
 /// spin.
 pub fn cmp(l: Spin, r: Spin) -> Option(Order) {
-  case #(spintotal.cmp(l.tot, r.tot), spinproj.cmp(l.proj, r.proj)) {
-    #(order.Eq, o) -> Some(o)
-    _ -> None
+  case spintotal.cmp(l.tot, r.tot), spinproj.cmp(l.proj, r.proj) {
+    order.Eq, o -> Some(o)
+    _, _ -> None
   }
 }
 
@@ -282,7 +282,10 @@ pub fn w3j_sel(jm1: Spin, jm2: Spin, jm3: Spin) -> Bool {
   m1 + m2 + m3 == 0
     && int.absolute_value(j1 - j2) <= j3
     && j3 <= j1 + j2
-    && !{ m1 == 0 && m2 == 0 && m3 == 0 } && int.is_even({ j1 + j2 + j3 } / 2)
+    && {
+      !{ m1 == 0 && m2 == 0 && m3 == 0 }
+      && int.is_even({ j1 + j2 + j3 } / 2)
+    }
 }
 
 /// Compute the Wigner 3*j* symbol `(jm1 jm2 jm3)`.

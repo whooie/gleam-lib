@@ -36,9 +36,9 @@ pub const zero: Complex = Complex(0.0, 0.0)
 
 /// Return `True` if two `Complex`es are equal.
 pub fn eq(l: Complex, r: Complex) -> Bool {
-  case #(float.cmp(l.re, r.re), float.cmp(l.im, r.im)) {
-    #(Eq, Eq) -> True
-    _ -> False
+  case float.cmp(l.re, r.re), float.cmp(l.im, r.im) {
+    Eq, Eq -> True
+    _, _ -> False
   }
 }
 
@@ -163,11 +163,11 @@ pub fn acosh(z: Complex) -> Complex {
 ///
 /// The output of this function is also called the phase angle.
 pub fn arg(z: Complex) -> Float {
-  case #(float.cmp(z.re, 0.0), float.cmp(z.im, 0.0)) {
-    #(Eq, Eq) -> 0.0
-    #(Eq, Gt) -> float.pi /. 2.0
-    #(Eq, Lt) -> float.neg(float.pi /. 2.0)
-    _ -> float.atan2(z.im, z.re)
+  case float.cmp(z.re, 0.0), float.cmp(z.im, 0.0) {
+    Eq, Eq -> 0.0
+    Eq, Gt -> float.pi /. 2.0
+    Eq, Lt -> float.neg(float.pi /. 2.0)
+    _, _ -> float.atan2(z.im, z.re)
   }
 }
 
@@ -183,9 +183,9 @@ pub fn asinh(z: Complex) -> Complex {
 
 /// Arc tangent.
 pub fn atan(z: Complex) -> Complex {
-  case #(eq(z, i), eq(z, neg(i))) {
-    #(True, _) | #(_, True) -> panic as "invalid argument in atan"
-    _ -> {
+  case eq(z, i), eq(z, neg(i)) {
+    True, _ | _, True -> panic as "invalid argument in atan"
+    _, _ -> {
       div(
         sub(
           ln(
@@ -212,9 +212,9 @@ pub fn atan(z: Complex) -> Complex {
 
 /// Inverse hyperbolic tangent.
 pub fn atanh(z: Complex) -> Complex {
-  case #(eq(z, Complex(1.0, 0.0)), eq(z, Complex(-1.0, 0.0))) {
-    #(True, _) | #(_, True) -> panic as "invalid argument in atanh"
-    _ -> {
+  case eq(z, Complex(1.0, 0.0)), eq(z, Complex(-1.0, 0.0)) {
+    True, _ | _, True -> panic as "invalid argument in atanh"
+    _, _ -> {
       divf(
         sub(
           ln(
@@ -321,18 +321,18 @@ pub fn sinh(z: Complex) -> Complex {
 
 /// Square root.
 pub fn sqrt(z: Complex) -> Complex {
-  case #(float.cmp(z.re, 0.0), float.cmp(z.im, 0.0)) {
-    #(Gt, Eq) -> Complex(float.sqrt(z.re), z.im)
-    #(_,  Eq) -> Complex(0.0, float.sqrt(float.neg(z.re)))
-    #(Eq, Gt) -> {
+  case float.cmp(z.re, 0.0), float.cmp(z.im, 0.0) {
+    Gt, Eq -> Complex(float.sqrt(z.re), z.im)
+    _,  Eq -> Complex(0.0, float.sqrt(float.neg(z.re)))
+    Eq, Gt -> {
       let x = float.sqrt(float.abs(z.im) /. 2.0)
       Complex(x, x)
     }
-    #(Eq, _ ) -> {
+    Eq, _ -> {
       let x = float.sqrt(float.abs(z.im) /. 2.0)
       Complex(x, float.neg(x))
     }
-    _ -> Complex(float.sqrt(norm(z)), arg(z) /. 2.0)
+    _, _ -> Complex(float.sqrt(norm(z)), arg(z) /. 2.0)
   }
 }
 
